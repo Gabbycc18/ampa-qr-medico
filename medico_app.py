@@ -1,12 +1,19 @@
 import streamlit as st
 import numpy as np
+import urllib.parse
 
 st.set_page_config(page_title="AMPA Médico", layout="centered")
 
 st.title("Interpretación AMPA - Modo médico")
 st.write("Pega aquí los datos generados por la app del paciente.")
 
-texto = st.text_area("Datos AMPA del paciente", height=160)
+query_params = st.query_params
+
+if "data" in query_params:
+    texto = urllib.parse.unquote(query_params["data"])
+    st.success("Datos cargados automáticamente desde QR")
+else:
+    texto = st.text_area("Datos AMPA del paciente", height=160)
 
 excluir_primer_dia = st.checkbox("Excluir primer día", value=True)
 
@@ -80,3 +87,5 @@ if st.button("Analizar AMPA"):
     except Exception as e:
         st.error("No se pudieron interpretar los datos. Revisa que el formato sea correcto.")
         st.write(e)
+
+       
